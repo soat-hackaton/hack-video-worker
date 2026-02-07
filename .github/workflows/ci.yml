@@ -45,7 +45,6 @@ jobs:
           context: .
           push: true
           no-cache: true
-          target: builder
           tags: ${{ env.IMAGE_TAG_GITHUB }}
 
   UnitTest:
