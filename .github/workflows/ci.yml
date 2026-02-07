@@ -63,7 +63,7 @@ jobs:
         run: docker pull ${{ env.IMAGE_TAG_GITHUB }}
 
       - name: test
-        run: docker run --privileged --rm ${{ env.IMAGE_TAG_GITHUB }} sh -c "PYTHONPATH=. make test"
+        run: docker run --privileged --rm ${{ env.IMAGE_TAG_GITHUB }} sh -c "make test"
 
   deploy:
     runs-on: ubuntu-latest
