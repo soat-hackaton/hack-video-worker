@@ -10,6 +10,7 @@ htmlcov
 .coverage
 .vscode/*
 google-services.json
+coverage.xml
 
 .DS_Store
 *.log

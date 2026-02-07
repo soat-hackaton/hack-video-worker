@@ -14,7 +14,7 @@ isort:
 	isort .
 
 test:
-	pytest --cov=.
+	pytest --cov=. --cov-report=xml --cov-report=term-missing
 
 test-coverage:
 	pytest --cov=. --cov-report html
