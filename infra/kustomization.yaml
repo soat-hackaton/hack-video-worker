@@ -1,6 +1,6 @@
 resources:
   - ./namespace.yml
-  - ./secrets/soat-backend.yml
-  - ./configmaps/soat-backend.yml
-  - ./deployments/soat-backend.yml
-  - ./hpas/soat-backend.yml
+  - ./secrets/hack-video-worker.yml
+  - ./configmaps/hack-video-worker.yml
+  - ./deployments/hack-video-worker.yml
+  - ./hpas/hack-video-worker.yml
