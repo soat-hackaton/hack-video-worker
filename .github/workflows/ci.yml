@@ -116,11 +116,20 @@ jobs:
           export K8S_IMAGE_TAG=${{ env.ECR_REPOSITORY }}
           export REPOSITORY_NAME=${{ env.REPOSITORY_NAME }}
           export SOAT_SECRET_KEY=${{ env.SOAT_SECRET_KEY }}
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
+          export PROCESSING_API_URL=${{ secrets.PROCESSING_API_URL }}
+          export RESULT_API_URL=${{ secrets.RESULT_API_URL }}
+          export BUCKET=${{ secrets.BUCKET }}
+          export QUEUE_URL=${{ secrets.QUEUE_URL }}
+          export AWS_REGION=${{ secrets.AWS_REGION }}
+
 
           envsubst < infra/namespace.yml | sponge infra/namespace.yml
-          envsubst < infra/secrets/auth-backend.yml | sponge infra/secrets/auth-backend.yml
-          envsubst < infra/deployments/auth-backend.yml | sponge infra/deployments/auth-backend.yml
-          envsubst < infra/services/auth-backend.yml | sponge infra/services/auth-backend.yml
+          envsubst < infra/secrets/hack-video-worker.yml | sponge infra/secrets/hack-video-worker.yml
+          envsubst < infra/configmaps/hack-video-worker.yml | sponge infra/configmaps/hack-video-worker.yml
+          envsubst < infra/deployments/hack-video-worker.yml | sponge infra/deployments/hack-video-worker.yml
 
           kubectl apply -k infra/
-          kubectl rollout status deployment/auth-service-backend -n auth-service
+          kubectl rollout status deployment/hack-video-worker -n hack-video-worker

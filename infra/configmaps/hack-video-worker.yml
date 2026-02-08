@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hack-video-worker-config
+  namespace: hack-video-worker
+  labels:
+    app: hack-video-worker
+    tier: backend
+  annotations:
+    maintainer: "SOAT - Grupo 75"
+    description: "ConfigMap com variáveis de ambiente para o backend"
+data:
+  PROCESSING_API_URL: ${PROCESSING_API_URL}
+  RESULT_API_URL: ${RESULT_API_URL}
+  BUCKET: ${BUCKET}
+  QUEUE_URL: ${QUEUE_URL}
+  AWS_REGION: ${AWS_REGION}

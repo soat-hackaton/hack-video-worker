@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hack-video-worker
+  namespace: hack-video-worker
+  labels:
+    app: hack-video-worker
+    tier: backend
+  annotations:
+    maintainer: "SOAT - Grupo 75"
+    description: "Deployment do backend da aplicação Go"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hack-video-worker
+  template:
+    metadata:
+      labels:
+        app: hack-video-worker
+    spec:
+      containers:
+        - name: hack-video-worker
+          image: ${K8S_IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          envFrom:
+            - configMapRef:
+                name: hack-video-worker-config
+            - secretRef:
+                name: hack-video-worker-secret
