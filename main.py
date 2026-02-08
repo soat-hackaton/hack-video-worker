@@ -15,11 +15,12 @@ from src.interfaces.worker.sqs_worker import SQSWorker
 async def main():
 
     session = aioboto3.Session(region_name=settings.AWS_REGION)
+    timeout = aiohttp.ClientTimeout(total=30)
 
     async with (
         session.client("sqs") as sqs,
         session.client("s3") as s3,
-        aiohttp.ClientSession() as http_session,
+        aiohttp.ClientSession(timeout=timeout) as http_session,
     ):
         storage = S3Storage(s3)
         queue = SQSMessageQueue(sqs, settings.QUEUE_URL)
