@@ -118,6 +118,7 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           export AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
           export PROCESSING_API_URL=${{ secrets.PROCESSING_API_URL }}
+          export INGEST_API_URL=${{ secrets.INGEST_API_URL }}
           export RESULT_API_URL=${{ secrets.RESULT_API_URL }}
           export BUCKET=${{ secrets.BUCKET }}
           export QUEUE_URL=${{ secrets.QUEUE_URL }}

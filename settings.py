@@ -7,6 +7,7 @@ class Settings(BaseSettings):
 
     PROCESSING_API_URL: str = "http://0.0.0.0:8080/api/upload"
     RESULT_API_URL: str = "http://0.0.0.0:8080/api/download"
+    INGEST_API_URL: str = "http://127.0.0.1:8000/api/video"
 
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""

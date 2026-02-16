@@ -9,6 +9,7 @@ from src.application.usecases.process_video_job import ProcessVideoJobUseCase
 from src.infrastructure.aws.s3_storage import S3Storage
 from src.infrastructure.aws.sqs_consumer import SQSMessageQueue
 from src.infrastructure.http.processing_api_client import ProcessingAPIClient
+from src.infrastructure.http.video_ingest_api_client import VideoIIngestApiAPIClient
 from src.interfaces.worker.sqs_worker import SQSWorker
 
 
@@ -24,11 +25,14 @@ async def main():
     ):
         storage = S3Storage(s3)
         queue = SQSMessageQueue(sqs, settings.QUEUE_URL)
-        api = ProcessingAPIClient(
+        processing_api = ProcessingAPIClient(
             http_session, settings.PROCESSING_API_URL, settings.RESULT_API_URL
         )
+        ingest_api_client = VideoIIngestApiAPIClient(
+            http_session, settings.INGEST_API_URL, settings.RESULT_API_URL
+        )
 
-        usecase = ProcessVideoJobUseCase(storage, api, queue, settings.BUCKET)
+        usecase = ProcessVideoJobUseCase(storage, processing_api, queue, settings.BUCKET, ingest_api_client)
 
         semaphore = asyncio.Semaphore(settings.SEMAPHORE_LIMIT)
 
