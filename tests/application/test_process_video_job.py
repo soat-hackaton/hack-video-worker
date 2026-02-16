@@ -5,7 +5,6 @@ from settings import settings
 from src.domain.entities.video_job import VideoJob
 from src.application.usecases.process_video_job import ProcessVideoJobUseCase
 from src.infrastructure.http.video_ingest_api_client import VideoIIngestApiAPIClient
-from tests.helper import mock_aiohttp_post
 
 
 @pytest.mark.asyncio
