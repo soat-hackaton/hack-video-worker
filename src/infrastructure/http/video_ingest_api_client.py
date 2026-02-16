@@ -5,7 +5,7 @@ from loguru import logger
 
 class VideoIIngestApiAPIClient:
 
-    def __init__(self, session, ingest_api_url, result_url):
+    def __init__(self, session, ingest_api_url):
         self.session = session
         self.ingest_api_url = ingest_api_url
 

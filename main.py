@@ -29,7 +29,7 @@ async def main():
             http_session, settings.PROCESSING_API_URL, settings.RESULT_API_URL
         )
         ingest_api_client = VideoIIngestApiAPIClient(
-            http_session, settings.INGEST_API_URL, settings.RESULT_API_URL
+            http_session, settings.INGEST_API_URL
         )
 
         usecase = ProcessVideoJobUseCase(storage, processing_api, queue, settings.BUCKET, ingest_api_client)

@@ -19,7 +19,7 @@ async def test_handle_message_when_usecase_fails_does_not_raise():
     )
 
     message = {
-        "Body": '{"filename":"a.mp4","s3_path":"input"}',
+        "Body": '{"filename":"a.mp4","s3_path":"input", "user_email":"test@example.com", "task_id":"task123"}',
         "ReceiptHandle": "abc"
     }
 

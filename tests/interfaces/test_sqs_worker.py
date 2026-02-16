@@ -18,7 +18,7 @@ async def test_handle_message_calls_usecase():
     )
 
     message = {
-        "Body": '{"filename":"a.mp4","s3_path":"input"}',
+        "Body": '{"filename":"a.mp4","s3_path":"input", "user_email":"test@example.com", "task_id":"task123"}',
         "ReceiptHandle": "abc"
     }
 
@@ -36,7 +36,7 @@ async def test_poll_receives_and_dispatches():
     sqs.receive_message.side_effect = [
         {
             "Messages": [
-                {"Body": '{"filename":"a.mp4","s3_path":"input"}', "ReceiptHandle": "1"}
+                {"Body": '{"filename":"a.mp4","s3_path":"input", "user_email":"test@example.com", "task_id":"task123"}', "ReceiptHandle": "1"}
             ]
         },
         asyncio.CancelledError(),

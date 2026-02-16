@@ -18,3 +18,6 @@ test:
 
 test-coverage:
 	pytest --cov=. --cov-report html
+
+test-matching:
+	PYTHONPATH=. pytest -k "$(TEST)" -vv
