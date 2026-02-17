@@ -30,6 +30,6 @@ async def test_output_path_is_correct():
 
     storage.upload.assert_called_once_with(
         "bucket",
-        "results/result.zip",
+        "results/task123",
         b"zip"
     )
