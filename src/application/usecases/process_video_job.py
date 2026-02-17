@@ -32,7 +32,7 @@ class ProcessVideoJobUseCase:
 
         processed_video = await self.processing_api.download_result(result_id)
 
-        output_path = f"results/{result_id}"
+        output_path = f"results/{job.task_id}"
         logger.info("Uploading processed video to S3: {}", output_path)
 
         await self.storage.upload(self.bucket, output_path, processed_video)
