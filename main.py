@@ -16,7 +16,7 @@ from src.interfaces.worker.sqs_worker import SQSWorker
 async def main():
 
     session = aioboto3.Session(region_name=settings.AWS_REGION)
-    timeout = aiohttp.ClientTimeout(total=30)
+    timeout = aiohttp.ClientTimeout(total=None)
 
     async with (
         session.client("sqs") as sqs,
