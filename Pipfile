@@ -10,7 +10,7 @@ pydantic = "*"
 aiohttp = "*"
 loguru = "*"
 make = "*"
-watchtower = "*"
+watchtower = ">=3.0.1"
 python-json-logger = "*"
 
 [dev-packages]
