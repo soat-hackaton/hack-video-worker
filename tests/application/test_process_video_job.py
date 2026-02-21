@@ -15,7 +15,7 @@ async def test_execute_success():
     queue = AsyncMock()
 
     storage.download.return_value = b"video"
-    api.process_video.return_value = "result123"
+    api.process_video.return_value = {"success": True, "result_id": "result123"}
     api.download_result.return_value = b"zip"
     http_session = MagicMock()
 

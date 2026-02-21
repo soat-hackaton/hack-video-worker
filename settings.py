@@ -19,8 +19,7 @@ class Settings(BaseSettings):
         "https://sqs.us-west-2.amazonaws.com/371168335772/video_processing"
     )
 
-    class Config:
-        env_file = ".env"
+    model_config = {"env_file": ".env"}
 
 
 settings = Settings()

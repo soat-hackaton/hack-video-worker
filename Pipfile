@@ -18,6 +18,7 @@ isort = "*"
 pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
+win32-setctime = "*"
 
 [requires]
 python_version = "3.13"

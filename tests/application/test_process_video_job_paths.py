@@ -14,7 +14,7 @@ async def test_output_path_is_correct():
     queue = AsyncMock()
 
     storage.download.return_value = b"x"
-    api.process_video.return_value = "result.zip"
+    api.process_video.return_value = {"success": True, "result_id": "result.zip"}
     api.download_result.return_value = b"zip"
 
     http_session = MagicMock()

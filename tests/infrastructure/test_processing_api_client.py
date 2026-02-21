@@ -21,7 +21,7 @@ async def test_process_video():
 
     result = await api.process_video("a.mp4", b"bytes")
 
-    assert result == "123"
+    assert result == {"success": True, "result_id": "123"}
 
 
 @pytest.mark.asyncio
