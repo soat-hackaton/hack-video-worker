@@ -10,6 +10,8 @@ pydantic = "*"
 aiohttp = "*"
 loguru = "*"
 make = "*"
+watchtower = "*"
+python-json-logger = "*"
 
 [dev-packages]
 black = "*"
