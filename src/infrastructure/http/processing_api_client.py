@@ -1,6 +1,8 @@
 from aiohttp import FormData, ClientError
 import asyncio
-from loguru import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProcessingAPIClient:
@@ -11,7 +13,7 @@ class ProcessingAPIClient:
         self.result_url = result_url
 
     async def process_video(self, filename: str, bytes_data: bytes) -> dict:
-        logger.info("Sending video to Processing API: {}", filename)
+        logger.info("Enviando vídeo para Processing API: %s", filename)
         form = FormData()
         form.add_field(
             "video",
@@ -23,24 +25,24 @@ class ProcessingAPIClient:
         try:
             async with self.session.post(self.processing_url, data=form, timeout=300) as resp:
                 logger.info(
-                    "Received response from Processing API with status: {}",
+                    "Resposta recebida da Processing API com status: %s",
                     resp.status,
                 )
                 resp.raise_for_status()
                 data = await resp.json()
-                logger.info("Processing API response data: {}", data)
+                logger.info("Dados de resposta da Processing API: %s", data)
                 return {"success": True, "result_id": data["zip_path"]}
         except asyncio.TimeoutError:
             logger.error("Timeout ao contactar a Processing API")
             return {"success": False, "message": "Timeout ao contactar a Processing API"}
         except ClientError as e:
-            logger.error("Erro de rede ao contactar a Processing API: {}", e)
+            logger.error("Erro de rede ao contactar a Processing API: %s", e)
             return {"success": False, "message": "Erro de rede ao contactar a Processing API"}
 
     async def download_result(self, result_id: str) -> bytes:
         async with self.session.get(f"{self.result_url}/{result_id}") as resp:
             logger.info(
-                "Downloading result from Result API for result ID: {}",
+                "Baixando resultado da Result API para o ID do resultado: %s",
                 result_id,
             )
             resp.raise_for_status()

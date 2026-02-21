@@ -2,7 +2,7 @@ import asyncio
 
 import aioboto3
 import aiohttp
-from loguru import logger
+import logging
 
 from settings import settings
 from src.application.usecases.process_video_job import ProcessVideoJobUseCase
@@ -12,9 +12,14 @@ from src.infrastructure.http.processing_api_client import ProcessingAPIClient
 from src.infrastructure.http.video_ingest_api_client import VideoIIngestApiAPIClient
 from src.interfaces.worker.sqs_worker import SQSWorker
 
+from src.infrastructure.logging.setup import setup_logging
+
+logger = logging.getLogger(__name__)
 
 async def main():
 
+    setup_logging()
+    
     session = aioboto3.Session(region_name=settings.AWS_REGION)
     timeout = aiohttp.ClientTimeout(total=None)
 
@@ -37,12 +42,12 @@ async def main():
         semaphore = asyncio.Semaphore(settings.SEMAPHORE_LIMIT)
 
         logger.info(
-            "Worker started with semaphore limit: {}", settings.SEMAPHORE_LIMIT
+            "Worker started with semaphore limit: %s", settings.SEMAPHORE_LIMIT
         )
-        logger.info("Listening to SQS queue: {}", settings.QUEUE_URL)
-        logger.info("Using Processing API: {}", settings.PROCESSING_API_URL)
-        logger.info("Using Result API: {}", settings.RESULT_API_URL)
-        logger.info("Using S3 Bucket: {}", settings.BUCKET)
+        logger.info("Listening to SQS queue: %s", settings.QUEUE_URL)
+        logger.info("Using Processing API: %s", settings.PROCESSING_API_URL)
+        logger.info("Using Result API: %s", settings.RESULT_API_URL)
+        logger.info("Using S3 Bucket: %s", settings.BUCKET)
 
         worker = SQSWorker(sqs, settings.QUEUE_URL, usecase, semaphore)
 

@@ -1,9 +1,12 @@
 import asyncio
 import json
 
-from loguru import logger
+import logging
 
+from src.infrastructure.logging.context import set_correlation_id
 from src.domain.entities.video_job import VideoJob
+
+logger = logging.getLogger(__name__)
 
 
 class SQSWorker:
@@ -21,10 +24,12 @@ class SQSWorker:
                 payload = json.loads(message["Body"])
                 job = VideoJob(**payload)
 
+                set_correlation_id(job.task_id)
+
                 await self.usecase.execute(job, message["ReceiptHandle"])
 
             except Exception as e:
-                print(f"Erro ao processar mensagem: {e}")
+                logger.error("⚠️ Falha ao processar mensagem do SQS: %s", e)
 
     async def poll(self):
 
@@ -41,7 +46,7 @@ class SQSWorker:
             )
 
             logger.info(
-                "Received {} messages from SQS",
+                "Received %s messages from SQS",
                 len(response.get("Messages", [])),
             )
 

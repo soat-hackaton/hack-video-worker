@@ -1,8 +1,10 @@
 import os
 
-from loguru import logger
+import logging
 
 from src.domain.entities.video_job import VideoJob
+
+logger = logging.getLogger(__name__)
 
 
 class ProcessVideoJobUseCase:
@@ -15,12 +17,12 @@ class ProcessVideoJobUseCase:
         self.ingest_api_client = ingest_api_client
 
     async def execute(self, job: VideoJob, receipt_handle: str):
-        logger.info("Processing job for file: {}", job.filename)
+        logger.info("Iniciando processamento do vídeo para o arquivo: %s", job.filename)
         await self.ingest_api_client.update_status(job.task_id, "PROCESSING", job.user_email)
 
         input_path = job.s3_path
 
-        logger.info("Downloading video from S3: {}", input_path)
+        logger.info("Download do vídeo do S3: %s", input_path)
 
         video_bytes = await self.storage.download(self.bucket, input_path)
 
@@ -30,21 +32,21 @@ class ProcessVideoJobUseCase:
         )
         
         if not response.get("success"):
-            logger.error("Processing API failed: {}", response.get("message"))
+            logger.error("Falha na API de processamento: %s", response.get("message"))
             await self.ingest_api_client.update_status(job.task_id, "ERROR", job.user_email)
             await self.message_queue.ack(receipt_handle)
             return
 
         result_id = response.get("result_id")
-        logger.info("Processing complete, result ID: {}", result_id)
+        logger.info("Processamento concluído, ID do resultado: %s", result_id)
 
         processed_video = await self.processing_api.download_result(result_id)
 
         output_path = f"results/{job.task_id}.zip"
-        logger.info("Uploading processed video to S3: {}", output_path)
+        logger.info("Fazendo upload do vídeo processado para o S3: %s", output_path)
 
         await self.storage.upload(self.bucket, output_path, processed_video)
 
         await self.ingest_api_client.update_status(job.task_id, "DONE", job.user_email)
         await self.message_queue.ack(receipt_handle)
-        logger.info("Job completed and ACK sent for file: {}", job.filename)
+        logger.info("Job concluído e ACK enviado para o arquivo: %s", job.filename)
