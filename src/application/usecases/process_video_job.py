@@ -24,10 +24,18 @@ class ProcessVideoJobUseCase:
 
         video_bytes = await self.storage.download(self.bucket, input_path)
 
-        result_id = await self.processing_api.process_video(
+        response = await self.processing_api.process_video(
             job.filename,
             video_bytes,
         )
+        
+        if not response.get("success"):
+            logger.error("Processing API failed: {}", response.get("message"))
+            await self.ingest_api_client.update_status(job.task_id, "ERROR", job.user_email)
+            await self.message_queue.ack(receipt_handle)
+            return
+
+        result_id = response.get("result_id")
         logger.info("Processing complete, result ID: {}", result_id)
 
         processed_video = await self.processing_api.download_result(result_id)

@@ -1,4 +1,5 @@
-from aiohttp import FormData
+from aiohttp import FormData, ClientError
+import asyncio
 from loguru import logger
 
 
@@ -9,7 +10,7 @@ class ProcessingAPIClient:
         self.processing_url = processing_url
         self.result_url = result_url
 
-    async def process_video(self, filename: str, bytes_data: bytes) -> str:
+    async def process_video(self, filename: str, bytes_data: bytes) -> dict:
         logger.info("Sending video to Processing API: {}", filename)
         form = FormData()
         form.add_field(
@@ -19,15 +20,22 @@ class ProcessingAPIClient:
             content_type="video/mp4",
         )
 
-        async with self.session.post(self.processing_url, data=form) as resp:
-            logger.info(
-                "Received response from Processing API with status: {}",
-                resp.status,
-            )
-            resp.raise_for_status()
-            data = await resp.json()
-            logger.info("Processing API response data: {}", data)
-            return data["zip_path"]
+        try:
+            async with self.session.post(self.processing_url, data=form, timeout=300) as resp:
+                logger.info(
+                    "Received response from Processing API with status: {}",
+                    resp.status,
+                )
+                resp.raise_for_status()
+                data = await resp.json()
+                logger.info("Processing API response data: {}", data)
+                return {"success": True, "result_id": data["zip_path"]}
+        except asyncio.TimeoutError:
+            logger.error("Timeout ao contactar a Processing API")
+            return {"success": False, "message": "Timeout ao contactar a Processing API"}
+        except ClientError as e:
+            logger.error("Erro de rede ao contactar a Processing API: {}", e)
+            return {"success": False, "message": "Erro de rede ao contactar a Processing API"}
 
     async def download_result(self, result_id: str) -> bytes:
         async with self.session.get(f"{self.result_url}/{result_id}") as resp:
