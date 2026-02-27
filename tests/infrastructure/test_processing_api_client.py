@@ -19,7 +19,7 @@ async def test_process_video():
 
     api = ProcessingAPIClient(session, "upload", "download")
 
-    result = await api.process_video("a.mp4", b"bytes")
+    result = await api.process_video("task123", "a.mp4", b"bytes")
 
     assert result == {"success": True, "result_id": "123"}
 
