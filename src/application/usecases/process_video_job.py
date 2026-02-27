@@ -27,6 +27,7 @@ class ProcessVideoJobUseCase:
         video_bytes = await self.storage.download(self.bucket, input_path)
 
         response = await self.processing_api.process_video(
+            job.task_id,
             job.filename,
             video_bytes,
         )

@@ -12,9 +12,10 @@ class ProcessingAPIClient:
         self.processing_url = processing_url
         self.result_url = result_url
 
-    async def process_video(self, filename: str, bytes_data: bytes) -> dict:
-        logger.info("Enviando vídeo para Processing API: %s", filename)
+    async def process_video(self, task_id: str, filename: str, bytes_data: bytes) -> dict:
+        logger.info("Enviando vídeo para Processing API: %s (task_id: %s)", filename, task_id)
         form = FormData()
+        form.add_field("task_id", task_id)
         form.add_field(
             "video",
             bytes_data,
